@@ -14,6 +14,12 @@ class Config
     // ----- Sessions
     const SANDBOX_SESSIONS = "https://ws.sandbox.pagseguro.uol.com.br/v2/sessions";
     const PRODUCTION_SESSIONS = "https://ws.pagseguro.uol.com.br/v2/sessions";
+    // ----- URL JS
+    const SANDBOX_URL_JS = "https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js";
+    const PRODUCTION_URL_JS = "https://stc.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js";
+    // ----- Parcelamentos 
+    const MAX_INSTALLMENT_NO_INTEREST = 10; // Maximo de parcelas sem Juros.
+    const MAX_INSTALLMENT = 10; // Maximo de parcelas que o site aceita.
 
     public static function getAuthentication():array
     {
@@ -35,7 +41,11 @@ class Config
     public static function getUrlSessions():string
     {
         return (Config::SANDBOX === true) ? Config::SANDBOX_SESSIONS : Config::PRODUCTION_SESSIONS;
-    } 
+    }
+    public  static function getUrlJS()
+    {
+        return (Config::SANDBOX === true) ? Config::SANDBOX_URL_JS : Config::PRODUCTION_URL_JS;
+    }
 
 }
 
