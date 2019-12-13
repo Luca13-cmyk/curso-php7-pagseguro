@@ -7,7 +7,7 @@ class Sql {
 	const HOSTNAME = "127.0.0.1";
 	const USERNAME = "luca17-cmyk";
 	const PASSWORD = "barcelona13";
-	const DBNAME = "db_percommerce";
+	const DBNAME = "db_ecommerce";
 
 	private $conn;
 

@@ -7,6 +7,7 @@ $app->get("/login", function(){
 
 	$page = new Page();
 
+
 	$page->setTpl("login", [
 		'error'=>User::getError(),
 		'errorRegister'=>User::getErrorRegister(),
