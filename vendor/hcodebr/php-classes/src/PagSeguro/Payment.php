@@ -10,6 +10,7 @@ class Payment
     private $reference = "";
     private $items = [];
     private $sender;
+    private $shippingAddressRequired = true;
     private $shipping;
     private $method;
     private $creditCard;
