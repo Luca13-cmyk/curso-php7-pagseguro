@@ -4,6 +4,14 @@
 
 namespace Hcode\PagSeguro\CreditCard;
 
+use Exception;
+use DOMDocument;
+use DOMElement;
+use DateTime;
+use Hcode\PagSeguro\Document;
+use Hcode\PagSeguro\Phone;
+
+
 class Holder
 {
     private $name;

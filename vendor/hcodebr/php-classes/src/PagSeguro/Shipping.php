@@ -1,6 +1,14 @@
 <?php
 
+// Entrega / Entregar o produto em tal endereço.
+
+
 namespace Hcode\PagSeguro;
+
+use Exception;
+use DOMDocument;
+use DOMElement;
+
 
 class Shipping
 {
@@ -38,7 +46,7 @@ class Shipping
 
         $address = $this->address->getDOMElement();
         $address = $dom->importNode($address, true); // O true é para trazer os nós filhos do Objeto Document que está instanciado pelo $address.
-        $address = $documents->appendChild($address);
+        $address = $shipping->appendChild($address);
 
         $cost = $dom->createElement("cost", number_format($this->cost, 2, ".", ""));
         $cost = $shipping->appendChild($cost);

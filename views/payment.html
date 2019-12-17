@@ -336,6 +336,17 @@ PagSeguroDirectPayment.setSessionId('{$pagseguro.id}');
             }
         });
 
+        $("#installments_field").on("change", function(){
+
+            var installment = $(this).find("option:selected").data("installment");
+
+            $("[name='installments_qtd']").val(installment.quantity); // Quantidade de parcelas
+            $("[name='installments_value']").val(installment.installmentAmount); // Valor da parcela
+            $("[name='installments_total']").val(installment.totalAmount); // Valor total da compra com juros/sem juros da parcela
+
+
+        });
+
         // Obtendo a bandeira. 
 
         $("#number_field").on("change", function(){
@@ -368,7 +379,7 @@ PagSeguroDirectPayment.setSessionId('{$pagseguro.id}');
                                         currency:"BRL"
                                     };
 
-                                    $.each(response.installments[$("#brand_field").val()], function(index, installment){
+                                    $.each(response.installments[$("#brand_field").val()], function(index, installment){ // Loop Jquery
 
                                         if (parseInt("{$pagseguro.maxInstallment}") > index) 
                                         {
@@ -432,6 +443,8 @@ PagSeguroDirectPayment.setSessionId('{$pagseguro.id}');
 
         });
 
+        // #################### VALIDAÇÃO DO CPF
+
         function isValidCPF(number) {
             var sum;
             var rest;
@@ -452,6 +465,8 @@ PagSeguroDirectPayment.setSessionId('{$pagseguro.id}');
             if (rest != parseInt(number.substring(10, 11) ) ) return false;
             return true;
         }
+        
+        // ################ ENVIAR DADOS CREDIT CART
 
         $("#form-credit").on("submit", function(e){
             
@@ -465,9 +480,9 @@ PagSeguroDirectPayment.setSessionId('{$pagseguro.id}');
 
             $("#form-credit [type=submit]").attr("disabled", "disabled");
 
-            var formData = $(this).serializeArray();
+            var formData = $(this).serializeArray(); // Armazena cada valor do form em forma de array.
 
-            var params = {};
+            var params = {}; // Agrupar todos as entradas para o envio ao servidor.
 
             $.each(formData, function(index, field){
                 params[field.name] = field.value;
@@ -478,7 +493,7 @@ PagSeguroDirectPayment.setSessionId('{$pagseguro.id}');
             PagSeguroDirectPayment.createCardToken({
                 cardNumber: params.number, // Número do cartão de crédito
                 brand: params.brand, // Bandeira do cartão
-                cvv: params.cvv, // CVV do cartão
+                cvv: params.cvv, // CVV do cartão (chave de segurançao)
                 expirationMonth: params.month, // Mês da expiração do cartão
                 expirationYear: params.year, // Ano da expiração do cartão, é necessário os 4 dígitos.
                 success: function(response) {
@@ -495,11 +510,11 @@ PagSeguroDirectPayment.setSessionId('{$pagseguro.id}');
 
                             params.hash = hash;
 
+                            $.post("/payment/credit", $.param(params), function(r){ // Envio do dados
+                                console.log(r);
+                            });
                         });
 
-                        $.post("/payment/credit", $.param(params), function(r){
-                            console.log(r);
-                        });
 
                 },
                 error: function(response) {

@@ -4,6 +4,11 @@
 
 namespace Hcode\PagSeguro\CreditCard;
 
+use Exception;
+use DOMDocument;
+use DOMElement;
+use Hcode\PagSeguro\Config;
+
 class Installment
 {
     private $quantity;
@@ -17,7 +22,7 @@ class Installment
         if ($value <= 0) throw new Exception("Valor total inválido.");
 
         $this->quantity = $quantity;
-        $this->$value = $value;
+        $this->value = $value;
     }
 
     public function getDOMElement():DOMElement

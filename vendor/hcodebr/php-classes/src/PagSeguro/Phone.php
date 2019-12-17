@@ -2,6 +2,10 @@
 
 namespace Hcode\PagSeguro;
 
+use Exception;
+use DOMDocument;
+use DOMElement;
+
 class Phone
 {
     private $areaCode;
@@ -9,6 +13,8 @@ class Phone
 
     public function __construct(int $areaCode, int $number)
     {
+        
+
         if (!$areaCode || $areaCode < 11 || $areaCode > 99)
         {
             throw new Exception("Informe o DDD do telefone.");
@@ -20,8 +26,8 @@ class Phone
             
         }
 
-        $this->$areaCode = $areaCode;
-        $this->$number = $number;
+        $this->areaCode = $areaCode;
+        $this->number = $number;
     }
 
     public function getDOMElement():DOMElement
