@@ -56,7 +56,7 @@ class Holder
 
         $phone = $this->phone->getDOMElement();
         $phone = $dom->importNode($phone, true); // O true é para trazer os nós filhos do Objeto Document que está instanciado pelo $phone.
-        $phone = $documents->appendChild($phone);
+        $phone = $holder->appendChild($phone);
 
         return $holder;
 

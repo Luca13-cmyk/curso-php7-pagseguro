@@ -347,7 +347,7 @@ PagSeguroDirectPayment.setSessionId('<?php echo htmlspecialchars( $pagseguro["id
 
         });
 
-        // Obtendo a bandeira. 
+        // ################################# Obtendo a bandeira.  ###############################################
 
         $("#number_field").on("change", function(){
 
@@ -443,6 +443,8 @@ PagSeguroDirectPayment.setSessionId('<?php echo htmlspecialchars( $pagseguro["id
 
         });
 
+        // #################### VALIDAÇÃO DO CPF #########################
+
         function isValidCPF(number) {
             var sum;
             var rest;
@@ -464,6 +466,57 @@ PagSeguroDirectPayment.setSessionId('<?php echo htmlspecialchars( $pagseguro["id
             return true;
         }
 
+        // ###############################################  BOLETO ####################################################
+
+        $("#form-boleto").on("submit", function(e){
+            
+            e.preventDefault();
+
+            if (!isValidCPF($("#form-boleto [name=cpf]").val()))
+            {
+                showError("Este número de CPF não é válido.");
+                return false;
+            }
+
+            var formData = $(this).serializeArray(); // Armazena cada valor do form em forma de array.
+
+            var params = {}; // Agrupar todos as entradas para o envio ao servidor.
+
+            $.each(formData, function(index, field){
+                params[field.name] = field.value;
+            }); 
+
+            PagSeguroDirectPayment.onSenderHashReady(function(response){
+
+            if(response.status == 'error') {
+                console.log(response.message);
+                return false;
+            }
+
+            var hash = response.senderHash; //Hash estará disponível nesta variável.
+
+            params.hash = hash;
+
+                $.post("/payment/boleto", $.param(params), function(r){ // Envio do dados
+                    // console.log(r);
+
+                    var response = JSON.parse(r);
+
+                    if (response.success)
+                    {
+                        window.location.href = "/payment/success/boleto";
+                    } else {
+                        showError("Não foi possível concluir o pagamento");
+                    }
+                }); // POST AJAX
+            }); // HASH PAGSEGURO
+
+
+        });
+
+        
+        // ###########################################  ENVIAR DADOS CREDIT CART ###############################################
+
         $("#form-credit").on("submit", function(e){
             
             e.preventDefault();
@@ -476,9 +529,9 @@ PagSeguroDirectPayment.setSessionId('<?php echo htmlspecialchars( $pagseguro["id
 
             $("#form-credit [type=submit]").attr("disabled", "disabled");
 
-            var formData = $(this).serializeArray();
+            var formData = $(this).serializeArray(); // Armazena cada valor do form em forma de array.
 
-            var params = {};
+            var params = {}; // Agrupar todos as entradas para o envio ao servidor.
 
             $.each(formData, function(index, field){
                 params[field.name] = field.value;
@@ -489,7 +542,7 @@ PagSeguroDirectPayment.setSessionId('<?php echo htmlspecialchars( $pagseguro["id
             PagSeguroDirectPayment.createCardToken({
                 cardNumber: params.number, // Número do cartão de crédito
                 brand: params.brand, // Bandeira do cartão
-                cvv: params.cvv, // CVV do cartão
+                cvv: params.cvv, // CVV do cartão (chave de segurançao)
                 expirationMonth: params.month, // Mês da expiração do cartão
                 expirationYear: params.year, // Ano da expiração do cartão, é necessário os 4 dígitos.
                 success: function(response) {
@@ -507,7 +560,16 @@ PagSeguroDirectPayment.setSessionId('<?php echo htmlspecialchars( $pagseguro["id
                             params.hash = hash;
 
                             $.post("/payment/credit", $.param(params), function(r){ // Envio do dados
-                                console.log(r);
+                                // console.log(r);
+
+                                var response = JSON.parse(r);
+
+                                if (response.success)
+                                {
+                                    window.location.href = "/payment/success";
+                                } else {
+                                    showError("Não foi possível concluir o pagamento");
+                                }
                             });
                         });
 

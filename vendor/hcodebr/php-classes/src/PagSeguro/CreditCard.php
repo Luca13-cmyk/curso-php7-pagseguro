@@ -34,26 +34,26 @@ class CreditCard
     {
         $dom = new DOMDocument();
 
-        $creditCart = $dom->createElement("creditCart");
-        $creditCart = $dom->appendChild($creditCart);
+        $creditCard = $dom->createElement("creditCard");
+        $creditCard = $dom->appendChild($creditCard);
 
         $token = $dom->createElement("token", $this->token);
-        $token = $creditCart->appendChild($token);
+        $token = $creditCard->appendChild($token);
 
         $installment = $this->installment->getDOMElement();
         $installment = $dom->importNode($installment, true); // O true é para trazer os nós filhos do Objeto Document que está instanciado pelo $installment.
-        $installment = $creditCart->appendChild($installment);
+        $installment = $creditCard->appendChild($installment);
 
         $holder = $this->holder->getDOMElement();
         $holder = $dom->importNode($holder, true); // O true é para trazer os nós filhos do Objeto Document que está instanciado pelo $holder.
-        $holder = $creditCart->appendChild($holder);
+        $holder = $creditCard->appendChild($holder);
 
         $billingAddress = $this->billingAddress->getDOMElement("billingAddress"); // Referencia ao $node do objeto Address
         $billingAddress = $dom->importNode($billingAddress, true); // O true é para trazer os nós filhos do Objeto Document que está instanciado pelo $billingAddress.
-        $billingAddress = $creditCart->appendChild($billingAddress);
+        $billingAddress = $creditCard->appendChild($billingAddress);
 
 
-        return $creditCart;
+        return $creditCard;
 
     }
     

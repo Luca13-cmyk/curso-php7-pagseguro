@@ -105,6 +105,12 @@ $app->post("/checkout", function(){
 	$_POST['deszipcode'] = $_POST['zipcode'];
 	$_POST['idperson'] = $user->getidperson();
 
+	$_POST['desaddress'] = utf8_encode($_POST['desaddress']);
+	$_POST['desdistrict'] = utf8_encode($_POST['desdistrict']);
+	$_POST['descity'] = utf8_encode($_POST['descity']);
+	$_POST['descountry'] = utf8_encode($_POST['descountry']);
+	$_POST['desstate'] = utf8_encode($_POST['desstate']);
+
 	$address->setData($_POST);
 
 	$address->save();
