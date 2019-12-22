@@ -20,12 +20,15 @@ class Config
     // Transacao
     const PRODUCTION_URL_TRANSACTION = "https://ws.pagseguro.uol.com.br/v2/transactions";
     const SANDBOX_URL_TRANSACTION = "https://ws.sandbox.pagseguro.uol.com.br/v2/transactions";
+    // Notifications
+    const SANDBOX_URL_NOTIFICATION = "https://ws.sandbox.pagseguro.uol.com.br/v3/transactions/notifications/";
+    const PRODUCTION_URL_NOTIFICATION = "https://ws.pagseguro.uol.com.br/v3/transactions/notifications/";
 
     // ----- Parcelamentos 
     const MAX_INSTALLMENT_NO_INTEREST = 10; // Maximo de parcelas sem Juros.
     const MAX_INSTALLMENT = 10; // Maximo de parcelas que o site aceita.
     // ----- Notification Url (Notificacao do status do pagamento)
-    const NOTIFICATION_URL = "http://hydenadesenvolve-com.umbler.net/payment/notification";
+    const NOTIFICATION_URL = "http://hydenadesenvolve-com.umbler.net/payment/notification"; // ROTA definada quando enviamos o pagamento para o PagSeguro.
 
     public static function getAuthentication():array
     {
@@ -55,6 +58,11 @@ class Config
     public  static function getUrlTransaction()
     {
         return (Config::SANDBOX === true) ? Config::SANDBOX_URL_TRANSACTION : Config::PRODUCTION_URL_TRANSACTION;
+    }
+
+    public  static function getNotificationTransactionURL()
+    {
+        return (Config::SANDBOX === true) ? Config::SANDBOX_URL_NOTIFICATION : Config::PRODUCTION_URL_NOTIFICATION;
     }
 
 }

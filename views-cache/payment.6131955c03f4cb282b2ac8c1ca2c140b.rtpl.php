@@ -466,6 +466,61 @@ PagSeguroDirectPayment.setSessionId('<?php echo htmlspecialchars( $pagseguro["id
             return true;
         }
 
+
+        // ############################################## DEBITO ################################################
+
+
+
+        $("#form-debit").on("submit", function(e){
+            
+            e.preventDefault();
+
+            if (!isValidCPF($("#form-debit [name=cpf]").val()))
+            {
+                showError("Este número de CPF não é válido.");
+                return false;
+            }
+
+            var formData = $(this).serializeArray(); // Armazena cada valor do form em forma de array.
+
+            var params = {}; // Agrupar todos as entradas para o envio ao servidor.
+
+            $.each(formData, function(index, field){
+                params[field.name] = field.value;
+            }); 
+
+            PagSeguroDirectPayment.onSenderHashReady(function(response){
+
+            if(response.status == 'error') {
+                console.log(response.message);
+                return false;
+            }
+
+            var hash = response.senderHash; //Hash estará disponível nesta variável.
+
+            params.hash = hash;
+
+                $.post("/payment/debit", $.param(params), function(r){ // Envio do dados
+                    // console.log(r);
+
+                    var response = JSON.parse(r);
+
+                    if (response.success)
+                    {
+                        window.location.href = "/payment/success/debit";
+                    } else {
+                        showError("Não foi possível concluir o pagamento");
+                    }
+                }); // POST AJAX
+            }); // HASH PAGSEGURO
+
+
+        });
+
+
+
+
+
         // ###############################################  BOLETO ####################################################
 
         $("#form-boleto").on("submit", function(e){
